@@ -65,17 +65,17 @@ return function(src, err_reporter)
   local function add_slash()
     if match('/') then
       while peek() ~= '\n' and not at_the_end() do
-        advance()
+        next()
       end
     else
-      add_tokoken('SLASH')
+      add_token('SLASH')
     end
   end
 
   local function add_str()
     while peek() ~= '"' and not at_the_end() do
       if peek() == '/n' then line = line + 1 end
-      advance()
+      next()
     end
 
     if at_the_end() then
@@ -83,7 +83,7 @@ return function(src, err_reporter)
       return
     end
 
-    advance()
+    next()
 
     add_token('STRING', src:sub(start + 1, curr - 2))
   end
@@ -93,11 +93,11 @@ return function(src, err_reporter)
   end
 
   local function add_int()
-    while is_dig(peek()) do advance() end
+    while is_dig(peek()) do next() end
 
     if peek() == '.' and is_dig(peek_next()) then
-      advance()
-      while is_dig(peek()) do advance() end
+      next()
+      while is_dig(peek()) do next() end
     end
 
     add_token('NUMBER', tonumber(src:sub(start, curr - 1)))
