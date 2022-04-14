@@ -16,5 +16,4 @@ An implementation of Lox in Lua for CS 403 with Professor Yessick.
 - fun
 - print
 - return
-- this
 - var
