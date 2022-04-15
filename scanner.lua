@@ -1,9 +1,11 @@
 -- Scanner for lox
 -- Thomas Hampton
+-- similar implentation to https://github.com/ryanplusplus/llox/
 
 -- local Token = require 'scan.Token'
 local switch = require 'utility.switch'
 
+-- main keys for lox
 local keys = {
   ['and'] = 'AND',
   ['class'] = 'CLASS',
@@ -23,6 +25,7 @@ local keys = {
   ['while'] = 'WHILE'
 }
 
+-- main function for scanner class
 return function(src, err_reporter)
   local start = 1
   local curr = 1
@@ -33,22 +36,26 @@ return function(src, err_reporter)
     return curr > #src
   end
 
+  -- scan next token
   local function next()
     curr = curr + 1
     return src:sub(curr - 1, curr - 1)
   end
 
+  -- add token to token list
   local function add_token(type, literal, body)
     body = body or src:sub(start, curr - 1)
     table.insert(tokens, Token(type, body, literal, line))
   end
 
+  -- call the add_token fuction
   local function token_adder(type, literal)
     return function ()
       add_token(type, literal)
     end
   end
 
+  -- check to see if current token matches expression exp
   local function match(exp)
     if at_the_end() then return false end
     if src:sub(curr, curr) ~= exp then return false end
@@ -56,14 +63,17 @@ return function(src, err_reporter)
     return true
   end
 
+  -- peek at the token
   local function peek()
     return src:sub(curr, curr) or '\0'
   end
 
+  -- peek at the next token
   local function peek_next()
     return src:sub(curr + 1, curr + 1) or '\0'
   end
 
+  -- add slash function
   local function add_slash()
     if match('/') then
       while peek() ~= '\n' and not at_the_end() do
@@ -74,12 +84,14 @@ return function(src, err_reporter)
     end
   end
 
+  -- add string function
   local function add_str()
     while peek() ~= '"' and not at_the_end() do
       if peek() == '/n' then line = line + 1 end
       next()
     end
 
+    -- check to see if at the end of the command
     if at_the_end() then
       err_reporter(line, 'str not terminated.')
       return
@@ -90,10 +102,12 @@ return function(src, err_reporter)
     add_token('STRING', src:sub(start + 1, curr - 2))
   end
 
-  local function is_dig(dig)
-    return dig:match('%d')
+  -- check to see if token is a digit
+  local function is_dig(tok)
+    return tok:match('%d')
   end
 
+  -- add the integer to token list
   local function add_int()
     while is_dig(peek()) do next() end
 
@@ -105,14 +119,17 @@ return function(src, err_reporter)
     add_token('NUMBER', tonumber(src:sub(start, curr - 1)))
   end
 
-  local function is_char(char)
-    return char:match('[%a_]')
+  -- check if token is a character
+  local function is_char(tok)
+    return tok:match('[%a_]')
   end
 
-  local function is_alphanum(char)
-    return is_dig(char) or is_char(char)
+  -- check if token is alphanumeric value
+  local function is_alphanum(tok)
+    return is_dig(tok) or is_char(tok)
   end
 
+  -- add identifier to token list
   local function add_id()
     while is_alphanum(peek()) do next() end
 
@@ -120,7 +137,9 @@ return function(src, err_reporter)
     add_token(keys[body] or 'IDENTIFIER')
   end
 
+  -- function to scan tokens
   local function scan_token()
+    -- check token against presets via switch case method
     switch(next(), {
       ['('] = token_adder('LEFT_PAREN'),
       [')'] = token_adder('RIGHT_PAREN'),
@@ -154,11 +173,12 @@ return function(src, err_reporter)
     })
   end
 
+  -- scan next token
   while not at_the_end() do
     start = curr
     scan_token()
   end
-
+  
   add_token('EOF', nil, '')
 
   return tokens
