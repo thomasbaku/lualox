@@ -3,7 +3,7 @@
 
 package.path = package.path .. '?.lua'
 
--- local scanner = require 'scanner'
+local scanner = require 'scanner'
 -- local parse = require 'parse'
 local Interpreter = require 'Interpreter'
 -- local Resolver = require 'Resolver'
@@ -26,7 +26,7 @@ local function parse_error(token, message)
   if token.type == 'EOF' then
     report_err(token.line, ' at end', message)
   else
-    report_err(token.line, " at '" .. token.lexeme .. "'", message)
+    report_err(token.line, " at '"..token.lexeme.."'", message)
   end
 end
 
@@ -40,7 +40,7 @@ local function run_err(err)
 end
 
 local function run(code)
-  -- local tokens = scan(code, gen_error)
+  local tokens = scanner(code, gen_error)
   if has_error then return end
   -- local statements = parse(tokens, parse_error)
   if has_error then return end
