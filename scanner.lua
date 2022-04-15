@@ -2,7 +2,7 @@
 -- Thomas Hampton
 
 -- local Token = require 'scan.Token'
--- local switch = require 'util.switch'
+local switch = require 'utility.switch'
 
 local keys = {
   ['and'] = 'AND',
@@ -44,7 +44,9 @@ return function(src, err_reporter)
   end
 
   local function token_adder(type, literal)
-    return fuction() add_token(type, literal) end
+    return function ()
+      add_token(type, literal)
+    end
   end
 
   local function match(exp)
