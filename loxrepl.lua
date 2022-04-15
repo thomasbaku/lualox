@@ -13,6 +13,32 @@ local resolver
 
 local has_error, has_runtime_error
 
+local function report_err(line, where, message)
+  io.stderr:write('line: '..line..' Error'..where..': '..message..'\n')
+  has_error = true
+end
+
+local function gen_error(line, message)
+  report_err(line, '', message)
+end
+
+local function parse_error(token, message)
+  if token.type == 'EOF' then
+    report_err(token.line, ' at end', message)
+  else
+    report_err(token.line, " at '" .. token.lexeme .. "'", message)
+  end
+end
+
+local function resolve_err(err)
+  report_err(err.token.line, " at '"..err.token.lexeme.."'", err.message)
+end
+
+local function run_err(err)
+  print(err)
+  io.stderr.write(err.message..'\nline: '..err.token.line..'\n')
+end
+
 local function run(code)
   -- local tokens = scan(code, gen_error)
   if has_error then return end
@@ -35,7 +61,7 @@ local function repl()
   end
 end
 
--- interpreter = Interpreter(runtime_error)
--- resolver = Resolver(interpreter, resolution_error)
+-- interpreter = Interpreter(run_err)
+-- resolver = Resolver(interpreter, resolve_err)
 
 repl()
