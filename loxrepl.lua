@@ -5,7 +5,7 @@ package.path = package.path .. '?.lua'
 
 -- local scanner = require 'scanner'
 -- local parse = require 'parse'
--- local Interpreter = require 'Interpreter'
+local Interpreter = require 'Interpreter'
 -- local Resolver = require 'Resolver'
 
 local interpreter
@@ -61,7 +61,7 @@ local function repl()
   end
 end
 
--- interpreter = Interpreter(run_err)
+interpreter = Interpreter(run_err)
 -- resolver = Resolver(interpreter, resolve_err)
 
 repl()
