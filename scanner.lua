@@ -114,14 +114,14 @@ return function(src, err_reporter)
   end
 
   local function add_id()
-    while is_alphanum(peek()) do advance() end
+    while is_alphanum(peek()) do next() end
 
     local body = src:sub(start, curr - 1)
-    add_token(keywords[body] or 'IDENTIFIER')
+    add_token(keys[body] or 'IDENTIFIER')
   end
 
   local function scan_token()
-    switch(advance(), {
+    switch(next(), {
       ['('] = token_adder('LEFT_PAREN'),
       [')'] = token_adder('RIGHT_PAREN'),
       ['{'] = token_adder('LEFT_BRACE'),
