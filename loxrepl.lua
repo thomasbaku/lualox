@@ -1,4 +1,5 @@
 -- read, evaluate, print loop for Lox
+-- can also run from a file
 -- Rollins Baird
 
 package.path = package.path .. '?.lua'
@@ -13,6 +14,7 @@ local resolver
 
 local has_error, has_runtime_error
 
+-- functions for different types of errors
 local function report_err(line, where, message)
   io.stderr:write('line: '..line..' Error'..where..': '..message..'\n')
   has_error = true
@@ -39,6 +41,7 @@ local function run_err(err)
   io.stderr.write(err.message..'\nline: '..err.token.line..'\n')
 end
 
+-- takes in code as text and passes it to the scanner, parser, and interpreter
 local function run(code)
   local tokens = scanner(code, gen_error)
   if has_error then return end
@@ -48,6 +51,23 @@ local function run(code)
   if has_runtime_error then return end
 end
 
+-- reads text from a file
+local function get_file(path)
+  local file = io.open(path, r)
+  assert(file, 'file: '..path..' not found')
+  local code = f:read('*all')
+  file:close()
+  return code
+end
+
+-- given a file path runs the Lox code inside it
+local function eval_file(path)
+  run(get_file(path))
+  if has_error then os.exit(65) end
+  if has_runtime_error then os.exit(70) end
+end
+
+-- continually prompts user for input and evaluates it
 local function repl()
   while true do
     io.write('> ')
@@ -64,4 +84,11 @@ end
 interpreter = Interpreter(run_err)
 -- resolver = Resolver(interpreter, resolve_err)
 
-repl()
+-- reads from file, user, or prints instructions
+if #arg > 1 then
+  print('Use with: lox [optional file path]')
+elseif #arg == 1 then
+  eval_file(arg[1])
+else
+  repl()
+end
