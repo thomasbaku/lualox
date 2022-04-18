@@ -1,0 +1,108 @@
+// tests impelmented features
+// Rollins Baird
+
+// tests of true, false, and, or, & nil also test if, else, fun, & print
+fun testTrue() {
+  if (true) {
+    print "true works";
+  } else{
+    print "true is broken";
+  }
+}
+
+fun testFalse() {
+  if (false) {
+    print "false is broken";
+  } else{
+    print "false works";
+  }
+}
+
+fun testAnd() {
+  if (true and false) {
+    print "and is broken";
+  }
+  if (false and true) {
+    print "and is broken";
+  }
+  if (false and false) {
+    print "and is broken";
+  }
+  if (true and true) {
+    print "and works";
+  }
+}
+
+fun testOr() {
+  if (true and false) {
+    if (true and true) {
+      if (false and true) {
+        print "or works";
+      }
+    }
+  } else {
+    print "or is broken";
+  }
+}
+
+testTrue();
+testFalse();
+testAnd();
+testOr();
+
+// functions to test +, -, *, / which also test fun, return, & print
+fun testAdd(x, y) {
+  return x + y;
+}
+
+fun testSub(x, y) {
+  return x - y;
+}
+
+fun testMult(x, y) {
+  return x * y;
+}
+
+fun testDiv(x, y) {
+  return x / y;
+}
+
+print testAdd(999, 1);
+print testSub(1000, 1);
+print testMult(12, 12);
+print testDiv(432, 27);
+
+// functions to test <, <=, >, >=, == that also test fun, return, & print
+fun testLT(a, b) {
+  return a < b;
+}
+
+fun testLTE(a, b) {
+  return a <= b;
+}
+
+fun testGT(a, b) {
+  return a > b;
+}
+
+fun testGTE(a, b) {
+  return a >= b;
+}
+
+fun testEQ(a, b) {
+  return a == b;
+}
+
+print "Should be all true:"
+print testLT(123, 1234);
+print testLTE(123, 123);
+print testGT(203, 83);
+print testGTE(325, 325);
+print testEQ(89324, 89324);
+
+print "Should be all false:"
+print testLT(12332, 1234);
+print testLTE(122343, 123);
+print testGT(203, 82343);
+print testGTE(3225, 323245);
+print testEQ(89323, 89324);
