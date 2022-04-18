@@ -21,7 +21,24 @@ Lua is a lightweight, high-level language designed for imbedded systems. It is d
 - print
 - return
 - var
+- \+
+- \-
+- \*
+- /
+- =
+- ==
+- <
+- <=
+- \>
+- \>=
 
 ## Tests
+
 - fib.lox: prints the first 25 fibonacci numbers
-- 
+- featureTest.lox: does one by one checks of each implemented feature
+
+## Run Instructions
+
+To use repl: ```lua loxrepl.lua```
+
+To run file: ```lua loxrepl.lua [filepath]```
