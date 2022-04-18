@@ -106,3 +106,14 @@ print testLTE(122343, 123);
 print testGT(203, 82343);
 print testGTE(3225, 323245);
 print testEQ(89323, 89324);
+
+// tests for var and also print
+var min = 15;
+var max = 45;
+var avg = (min+max)/2;
+print avg;
+
+var breakfast = "bagels";
+print breakfast; // "bagels".
+breakfast = "beignets";
+print breakfast; // "beignets".
