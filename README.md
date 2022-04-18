@@ -21,3 +21,7 @@ Lua is a lightweight, high-level language designed for imbedded systems. It is d
 - print
 - return
 - var
+
+## Tests
+- fib.lox: prints the first 25 fibonacci numbers
+- 
