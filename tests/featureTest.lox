@@ -1,6 +1,9 @@
 // tests impelmented features
 // Rollins Baird
 
+// test print
+print "hi mom!"
+
 // tests of true, false, and, or, & nil also test if, else, fun, & print
 fun testTrue() {
   if (true) {
@@ -117,3 +120,39 @@ var breakfast = "bagels";
 print breakfast; // "bagels".
 breakfast = "beignets";
 print breakfast; // "beignets".
+
+// test while
+var a = 1;
+while (a < 10) {
+  print a;
+  a = a + 1;
+}
+
+// test for
+for (var a = 1; a < 10; a = a + 1) {
+  print a;
+}
+
+// test local function in function
+fun outerFunction() {
+  fun localFunction() {
+    print "I'm local!";
+  }
+
+  localFunction();
+}
+
+// test function returns a function
+fun returnFunction() {
+  var outside = "outside";
+
+  fun inner() {
+    print outside;
+  }
+
+  return inner;
+}
+
+var fn = returnFunction();
+fn();
+
