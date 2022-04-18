@@ -53,9 +53,9 @@ end
 
 -- reads text from a file
 local function get_file(path)
-  local file = io.open(path, r)
+  local file = io.open(path, 'r')
   assert(file, 'file: '..path..' not found')
-  local code = f:read('*all')
+  local code = file:read('*all')
   file:close()
   return code
 end
