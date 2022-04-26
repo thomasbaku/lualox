@@ -2,7 +2,7 @@
 -- Thomas Hampton
 -- similar implentation to https://github.com/ryanplusplus/llox/
 
-local Token = require 'scan.Token'
+local Token = require 'Token'
 local switch = require 'utility.switch'
 
 -- main keys for lox
