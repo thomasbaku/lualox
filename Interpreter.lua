@@ -80,6 +80,10 @@ return function(err_report)
         return visit(node.expression, env)
       end,
 
+      literal = function()
+        return node.value
+      end,
+
       print = function()
         print(visit(node.value, env))
       end,

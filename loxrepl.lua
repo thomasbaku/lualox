@@ -47,6 +47,8 @@ local function run(code)
   if has_error then return end
   local statements = parser(tokens, parser_error)
   if has_error then return end
+  resolver.resolve(statements)
+  if has_error then return end
   interpreter.interpret(statements)
   if has_runtime_error then return end
 end
