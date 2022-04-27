@@ -1,4 +1,4 @@
-local switch = require 'util.switch'
+local switch = require 'utility.switch'
 
 return function(interpreter, error_reporter)
   local scopes = {}
