@@ -1,8 +1,16 @@
-local default = {}
+local default_case = {}
 
 local function switch(value, cases)
-	local default = cases[default] or load''
-	return setmetatable(cases, {_index = function() return default end})[value](value)
+  local default = cases[default_case] or load''
+  return setmetatable(cases, {
+    __index = function()
+      return default
+    end
+  })[value](value)
 end
 
-return setmetatable({default}, {_call = function(_, ...) return switch(...) end})
+return setmetatable({
+  default = default_case
+}, {
+  __call = function(_, ...) return switch(...) end
+})
