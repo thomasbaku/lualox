@@ -36,6 +36,7 @@ Lua is a lightweight, high-level language designed for imbedded systems. It is d
 
 - fib.lox: prints the first 25 fibonacci numbers
 - featureTest.lox: does one by one checks of each implemented feature
+- gradebook.lox: calculates final grade for CS 403
 
 ## Run Instructions
 

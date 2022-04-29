@@ -2,11 +2,11 @@
 -- can also run from a file
 -- Rollins Baird
 
-package.path = package.path .. '?.lua'
+package.path = package.path .. ';src/?.lua'
 
 local scanner = require 'scanner'
 local parser = require 'parser'
-local Interpreter = require 'Interpreter'
+local Interpreter = require 'interpret.Interpreter'
 local Resolver = require 'resolver'
 
 local interpreter

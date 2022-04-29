@@ -1,24 +1,30 @@
 // function to calculate CS 403 grade
 // Thomas Hampton
 
-fun gradebook(midterm, proj1, proj2, projFinal, hs1, hs2, hs3, hs4, hs5, final)
-{
-  proj = ((proj1 + proj2) / 2) * .3;
-  other = ((hs1 + hs2 + hs3 + hs4 + hs5) / 5) * .2;
+fun gradebook(midterm, proj1, proj2, projFinal, hs, final) {
+  var proj = ((proj1 + proj2) / 2) * 0.3;
 
-  return proj + other + (midterm * .2) + (projFinal * .2) + (final * .1);
+  return proj + hs + (midterm * 0.2) + (projFinal * 0.2) + (final * 0.1);
+}
+
+fun hsAvg(hs1, hs2, hs3, hs4, hs5) {
+  var hs = ((hs1 + hs2 + hs3 + hs4 + hs5) / 5) * 0.2;
+  return hs;
 }
 
 // Main
-midterm = 85;
-proj1 = 100;
-proj2 = 100;
-projFinal = 89;
-hs1 = 100;
-hs2 = 100;
-hs3 = 100;
-hs4 = 100;
-hs5 = 100;
-final = 98;
+var midterm = 85;
+var proj1 = 100;
+var proj2 = 100;
+var projFinal = 89;
+var hs1 = 100;
+var hs2 = 100;
+var hs3 = 100;
+var hs4 = 100;
+var hs5 = 100;
+var final = 98;
 
-print "final grade: ", gradebook(midterm, proj1, proj2, projFinal, hs1, hs2, hs3, hs4, hs5, final);
+var hs = hsAvg(hs1, hs2, hs3, hs4, hs5);
+
+print "final grade:";
+print gradebook(midterm, proj1, proj2, projFinal, hs, final);

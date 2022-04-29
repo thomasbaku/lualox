@@ -2,7 +2,7 @@
 // Rollins Baird
 
 // test print
-print "hi mom!"
+print "hi mom!";
 
 // tests of true, false, and, or, & nil also test if, else, fun, & print
 fun testTrue() {
@@ -70,10 +70,10 @@ fun testDiv(x, y) {
   return x / y;
 }
 
-print testAdd(999, 1);
-print testSub(1000, 1);
-print testMult(12, 12);
-print testDiv(432, 27);
+print testAdd(999, 1); // = 1000
+print testSub(1000, 1); // = 999
+print testMult(12, 12); // = 144
+print testDiv(432, 27); // = 16.0
 
 // functions to test <, <=, >, >=, == that also test fun, return, & print
 fun testLT(a, b) {
@@ -96,14 +96,14 @@ fun testEQ(a, b) {
   return a == b;
 }
 
-print "Should be all true:"
+print "Should be all true:";
 print testLT(123, 1234);
 print testLTE(123, 123);
 print testGT(203, 83);
 print testGTE(325, 325);
 print testEQ(89324, 89324);
 
-print "Should be all false:"
+print "Should be all false:";
 print testLT(12332, 1234);
 print testLTE(122343, 123);
 print testGT(203, 82343);
@@ -114,7 +114,7 @@ print testEQ(89323, 89324);
 var min = 15;
 var max = 45;
 var avg = (min+max)/2;
-print avg;
+print avg; // = 30.0
 
 var breakfast = "bagels";
 print breakfast; // "bagels".
@@ -124,13 +124,13 @@ print breakfast; // "beignets".
 // test while
 var a = 1;
 while (a < 10) {
-  print a;
+  print a; // 1 ... 9
   a = a + 1;
 }
 
 // test for
 for (var a = 1; a < 10; a = a + 1) {
-  print a;
+  print a; // 1 ... 9
 }
 
 // test local function in function
@@ -141,6 +141,8 @@ fun outerFunction() {
 
   localFunction();
 }
+
+outerFunction(); // "I'm local!"
 
 // test function returns a function
 fun returnFunction() {
@@ -154,5 +156,5 @@ fun returnFunction() {
 }
 
 var fn = returnFunction();
-fn();
+fn(); // "outside"
 

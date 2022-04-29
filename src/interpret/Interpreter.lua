@@ -1,6 +1,7 @@
 local switch = require 'utility.switch'
-local Function = require 'Function'
-local Env = require 'Env'
+local Function = require 'interpret.Function'
+local Env = require 'interpret.Env'
+local Object = require 'interpret.Object'
 
 local function valid_types(expected, token, ...)
   local operands = {...}
@@ -114,6 +115,36 @@ return function(err_report)
           end
         end)
         if not ok then error(result) end
+      end,
+
+      object = function()
+        env.define(node.name.lexeme)
+
+        local superclass
+        if node.superclass then
+          superclass = visit(node.superclass)
+          if type(superclass) ~= 'table' or not superclass.is_class then
+            error({
+              token = node.name,
+              message = 'Superclass must be a class.'
+            })
+          end
+
+          env = Env(env)
+          env.define('super', superclass)
+        end
+
+        local methods = {}
+        for _, method in ipairs(node.methods) do
+          methods[method.name.lexeme] = Function(method, env, method.name.lexeme == 'init')
+        end
+        local class = Object(node.name.lexeme, superclass, methods)
+
+        if superclass then
+          env = env.parent
+        end
+
+        env.set(node.name, class)
       end,
 
       ['if'] = function()

@@ -16,4 +16,5 @@ fun printfib(n) {
 }
 
 // last number should be 7540113804746346429
+// any number larger will cause an overflow
 printfib(93);
