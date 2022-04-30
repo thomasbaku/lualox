@@ -1,0 +1,39 @@
+// Connor Smith
+
+// positive mod function
+fun posMod (dividend, divisor) {
+    if (dividend == 0) return 0; 
+    while(dividend >= divisor) {
+        dividend = dividend - divisor;
+    }
+    return dividend;
+}
+
+// integer divide function
+fun intDiv (dividend, divisor) {
+    var count = 0;
+    if (dividend == 0) return 0; 
+    while(dividend >= divisor) {
+        count = count+1;
+        dividend = dividend - divisor;
+    }
+    return count;
+}
+// prints change divided up into quarters, then dimes, then nickels, then pennies
+fun printChange(num) {
+    var temp = 0;
+    num = num*100;
+    temp =intDiv(num,25);
+    print temp;
+    num = posMod(num,25);
+    temp = intDiv(num,10);
+    print temp;
+    num = posMod(num,10);
+    temp = intDiv(num,5);
+    print temp;
+    num = posMod(num,5);
+    temp = intDiv(num,1);
+    print temp;
+}
+
+printChange(3.99);
