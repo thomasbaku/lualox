@@ -34,12 +34,24 @@ Lua is a lightweight, high-level language designed for imbedded systems. It is d
 
 ## Tests
 
-- fib.lox: prints the first 25 fibonacci numbers
-- featureTest.lox: does one by one checks of each implemented feature
+- featuretest.lox: does one by one checks of each implemented feature\
+
+![Output for featuretest.lox](tests\output\featuretests.png "All feature tests pass")
+
+- fib.lox: prints the first 92 fibonacci numbers (screenshot only shows the first few)
+
+![Output for fib.lox](tests\output\fibnumbers.png "The first few of 92 fibonacci numbers")
+
 - gradebook.lox: calculates final grade for CS 403
+
+![Output for gradebook.lox](tests\output\finalgrade.png "Print out of calculated grade")
+
+- mod.lox: implements mod function and uses it to calculate change in coins for a given dollar amount
+
+![Output for mod.lox](tests\output\change.png "Change for $3.99 displayed")
 
 ## Run Instructions
 
-To use repl: ```lua loxrepl.lua```
+To use repl: ```lua54 loxrepl.lua```
 
-To run file: ```lua loxrepl.lua [filepath]```
+To run file: ```lua54 loxrepl.lua [filepath]```

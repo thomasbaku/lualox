@@ -8,7 +8,7 @@ print "hi mom!";
 fun testTrue() {
   if (true) {
     print "true works";
-  } else{
+  } else {
     print "true is broken";
   }
 }
@@ -16,8 +16,16 @@ fun testTrue() {
 fun testFalse() {
   if (false) {
     print "false is broken";
-  } else{
+  } else {
     print "false works";
+  }
+}
+
+fun testNot() {
+  if (!false) {
+    print "not works";
+  } else {
+    print "not is broken";
   }
 }
 
@@ -38,18 +46,22 @@ fun testAnd() {
 
 fun testOr() {
   if (true and false) {
-    if (true and true) {
-      if (false and true) {
-        print "or works";
-      }
-    }
-  } else {
+    print "or works";
+  }
+  if (false and true) {
+    print "or works";
+  }
+  if (true and true) {
+    print "or works";
+  }
+  if (false and false) {
     print "or is broken";
   }
 }
 
 testTrue();
 testFalse();
+testNot();
 testAnd();
 testOr();
 
@@ -70,10 +82,10 @@ fun testDiv(x, y) {
   return x / y;
 }
 
-print testAdd(999, 1); // = 1000
-print testSub(1000, 1); // = 999
-print testMult(12, 12); // = 144
-print testDiv(432, 27); // = 16.0
+print testAdd(999, 1); // 1000
+print testSub(1000, 1); // 999
+print testMult(12, 12); // 144
+print testDiv(432, 27); // 16.0
 
 // functions to test <, <=, >, >=, == that also test fun, return, & print
 fun testLT(a, b) {
@@ -101,7 +113,7 @@ print testLT(123, 1234);
 print testLTE(123, 123);
 print testGT(203, 83);
 print testGTE(325, 325);
-print testEQ(89324, 89324);
+print testEQ(-89324, -89324);
 
 print "Should be all false:";
 print testLT(12332, 1234);
@@ -116,22 +128,24 @@ var max = 45;
 var avg = (min+max)/2;
 print avg; // = 30.0
 
-var breakfast = "bagels";
-print breakfast; // "bagels".
-breakfast = "beignets";
-print breakfast; // "beignets".
 
 // test while
 var a = 1;
-while (a < 10) {
-  print a; // 1 ... 9
+while (a < 6) {
+  print a; // 1 ... 5
   a = a + 1;
 }
 
 // test for
-for (var a = 1; a < 10; a = a + 1) {
-  print a; // 1 ... 9
+for (var a = 1; a < 6; a = a + 1) {
+  print a; // 1 ... 5
 }
+
+// following examples from crafting interpreters: https://craftinginterpreters.com/the-lox-language.html
+var breakfast = "bagels";
+print breakfast; // "bagels".
+breakfast = "beignets";
+print breakfast; // "beignets".
 
 // test local function in function
 fun outerFunction() {
