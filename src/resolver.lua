@@ -1,3 +1,11 @@
+-- Rollins Baird
+
+-- based on: https://craftinginterpreters.com/
+-- great resource for learning Lua (or almost any other language): https://learnxinyminutes.com/docs/lua/
+-- it was helpful to look at the books Java implementation of this feature: https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Resolver.java
+-- also found this implementation helpful and used it to test Lox code: https://github.com/1Hibiki1/locks-py
+-- also a solid implementation that was helpful when figuring out trickier bits: https://github.com/ryanplusplus/llox
+
 local switch = require 'utility.switch'
 
 return function(interpreter, error_reporter)
@@ -73,11 +81,11 @@ return function(interpreter, error_reporter)
         local enclosing_class = current_class
         current_class = 'class'
 
-        if node.superclass then
+        if node.parentclass then
           current_class = 'subclass'
-          visit(node.superclass)
+          visit(node.parentclass)
           begin_scope()
-          scopes[#scopes].super = true
+          scopes[#scopes].parent = true
         end
 
         begin_scope();
@@ -87,7 +95,7 @@ return function(interpreter, error_reporter)
         end
         end_scope()
 
-        if node.superclass then
+        if node.parentclass then
           end_scope()
         end
 
@@ -98,7 +106,7 @@ return function(interpreter, error_reporter)
         if current_class == 'none' then
           error({
             token = node.keyword,
-            message = "Cannot use 'this' outside of a class."
+            message = "Invalid"
           })
         else
           resolve_local(node, node.keyword)
@@ -154,7 +162,7 @@ return function(interpreter, error_reporter)
         if current_function == 'none' then
           error_reporter({
             token = node.keyword,
-            message = 'Cannot return from top-level code.'
+            message = 'Must be used in a function'
           })
         end
 
@@ -210,16 +218,16 @@ return function(interpreter, error_reporter)
         visit(node.object)
       end,
 
-      super = function()
+      parent = function()
         if current_class == 'none' then
           error({
             token = node.keyword,
-            message = "Cannot use 'super' outside of a class."
+            message = "Invalid"
           })
         elseif current_class ~= 'subclass' then
           error({
             token = node.keyword,
-            message = "Cannot use 'super' in a class with no superclass."
+            message = "Invalid"
           })
         end
 

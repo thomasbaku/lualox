@@ -1,7 +1,16 @@
+--Rollins Baird
+-- follows visit patern of a treewalk interpreter
+
+-- based on: https://craftinginterpreters.com/
+-- great resource for learning Lua (or almost any other language): https://learnxinyminutes.com/docs/lua/
+-- it was helpful to look at the books Java implementation of this feature: https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxInstance.java
+-- also found this implementation helpful and used it to test Lox code: https://github.com/1Hibiki1/locks-py
+-- also a solid implementation that was helpful when figuring out trickier bits: https://github.com/ryanplusplus/llox
+
 local switch = require 'utility.switch'
-local Function = require 'interpret.Function'
-local Env = require 'interpret.Env'
-local Object = require 'interpret.Object'
+local Function = require 'interpret.function'
+local Env = require 'interpret.env'
+local Object = require 'interpret.object'
 
 local function valid_types(expected, token, ...)
   local operands = {...}
@@ -34,6 +43,7 @@ return function(err_report)
     end    
   end
 
+  -- based on: http://www.craftinginterpreters.com/representing-code.html
   local function visit(node, env)
     return switch(node.class, {
       unary = function()

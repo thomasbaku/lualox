@@ -1,3 +1,12 @@
+-- Rollins Baird
+-- creates and returns a Lox enviroment
+
+-- based on: https://craftinginterpreters.com/
+-- great resource for learning Lua (or almost any other language): https://learnxinyminutes.com/docs/lua/
+-- it was helpful to look at the books Java implementation of this feature: https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Environment.java
+-- also found this implementation helpful and used it to test Lox code: https://github.com/1Hibiki1/locks-py
+-- also a solid implementation that was helpful when figuring out trickier bits: https://github.com/ryanplusplus/llox
+
 return function (parent)
   local defined = {}
   local values = {}

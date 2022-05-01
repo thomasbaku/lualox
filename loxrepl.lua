@@ -1,12 +1,18 @@
+-- Rollins Baird
 -- read, evaluate, print loop for Lox
 -- can also run from a file
--- Rollins Baird
+
+-- based on: https://craftinginterpreters.com/
+-- great resource for learning Lua (or almost any other language): https://learnxinyminutes.com/docs/lua/
+-- it was helpful to look at the books Java implementation of this feature: https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Lox.java
+-- also found this implementation helpful and used it to test Lox code: https://github.com/1Hibiki1/locks-py
+-- also a solid implementation that was helpful when figuring out trickier bits: https://github.com/ryanplusplus/llox
 
 package.path = package.path .. ';src/?.lua'
 
 local scanner = require 'scanner'
 local parser = require 'parser'
-local Interpreter = require 'interpret.Interpreter'
+local Interpreter = require 'interpret.interpreter'
 local Resolver = require 'resolver'
 
 local interpreter
