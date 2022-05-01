@@ -22,17 +22,24 @@ fun intDiv (dividend, divisor) {
 // prints change divided up into quarters, then dimes, then nickels, then pennies
 fun printChange(num) {
     var temp = 0;
+    print "Change for ";
+    print num;
+    print "";
     num = num*100;
     temp =intDiv(num,25);
+    print "Quarters:";
     print temp;
     num = posMod(num,25);
     temp = intDiv(num,10);
+    print "Dimes:";
     print temp;
     num = posMod(num,10);
     temp = intDiv(num,5);
+    print "Nickels:";
     print temp;
     num = posMod(num,5);
     temp = intDiv(num,1);
+    print "Pennies:";
     print temp;
 }
 

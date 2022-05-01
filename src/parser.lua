@@ -3,33 +3,33 @@
 return function(tokens, error_reporter)
   local current = 1
 
-  local function ParseError(token, message)
+  local function ParseErr(token, message)
     error_reporter(token, message)
     return 'parse_error'
   end
 
-  local function peek()
+  local function next()
     return tokens[current]
   end
 
-  local function previous()
+  local function last()
     return tokens[current - 1]
   end
 
   local function at_end()
-    return peek().type == 'EOF'
+    return next().type == 'EOF'
   end
 
   local function check(type)
     if at_end() then return false end
-    return peek().type == type
+    return next().type == type
   end
 
   local function advance()
     if not at_end() then
       current = current + 1
     end
-    return previous()
+    return last()
   end
 
   local function match(types)
@@ -45,23 +45,22 @@ return function(tokens, error_reporter)
 
   local function consume(type, message)
     if check(type) then return advance() end
-    error(ParseError(peek(), message))
+    error(ParseErr(next(), message))
   end
 
   local function synchronize()
     advance();
 
     while not at_end() do
-      if previous().type == 'SEMICOLON' then return end
+      if last().type == 'SEMICOLON' then return end
 
-      if peek().type == 'CLASS' or
-        peek().type == 'FUN' or
-        peek().type == 'VAR' or
-        peek().type == 'FOR' or
-        peek().type == 'IF' or
-        peek().type == 'WHILE' or
-        peek().type == 'PRINT' or
-        peek().type == 'RETURN' then
+      if next().type == 'FUN' or
+        next().type == 'IF' or
+        next().type == 'FOR' or
+        next().type == 'VAR' or
+        next().type == 'PRINT' or
+        next().type == 'RETURN' or
+        next().type == 'WHILE' then
         return
       end
 
@@ -76,7 +75,7 @@ return function(tokens, error_reporter)
       while match(token_types) do
         expr = {
           class = 'binary',
-          operator = previous(),
+          operator = last(),
           left = expr,
           right = expression_type()
         }
@@ -93,22 +92,11 @@ return function(tokens, error_reporter)
     if match({ 'FALSE' }) then return { class = 'literal', value = false } end
     if match({ 'TRUE' }) then return { class = 'literal', value = true } end
     if match({ 'NIL' }) then return { class = 'literal', value = nil } end
-    if match({ 'NUMBER', 'STRING' }) then return { class = 'literal', value = previous().literal } end
-    if match({ 'SUPER' }) then
-      local keyword = previous()
-      consume('DOT', "Expect '.' after 'super'.")
-      local method = consume('IDENTIFIER', 'Expect superclass method name.')
-      return {
-        class = 'super',
-        keyword = keyword,
-        method = method
-      }
-    end
-    if match({ 'THIS' }) then return { class = 'this', keyword = previous() } end
+    if match({ 'NUMBER', 'STRING' }) then return { class = 'literal', value = last().literal } end
     if match({ 'IDENTIFIER' }) then
       return {
         class = 'variable',
-        name = previous()
+        name = last()
       }
     end
     if match({ 'LEFT_PAREN' }) then
@@ -120,7 +108,7 @@ return function(tokens, error_reporter)
       }
     end
 
-    error(ParseError(peek(), 'Expect expression.'))
+    error(ParseErr(next(), 'Expect expression.'))
   end
 
   local function finish_call(callee)
@@ -128,7 +116,7 @@ return function(tokens, error_reporter)
     if not check('RIGHT_PAREN') then
       repeat
         if #arguments >= 8 then
-          ParseError(peek(), 'Cannot have more than 8 arguments.')
+          ParseErr(next(), 'Cannot have more than 8 arguments.')
         end
         table.insert(arguments, expression())
       until not match({ 'COMMA' })
@@ -169,7 +157,7 @@ return function(tokens, error_reporter)
     if match({ 'BANG', 'MINUS' }) then
       return {
         class = 'unary',
-        operator = previous(),
+        operator = last(),
         left = unary()
       }
     end
@@ -186,7 +174,7 @@ return function(tokens, error_reporter)
     local expression = equality()
 
     while match({ 'AND' }) do
-      local operator = previous()
+      local operator = last()
       local right = equality()
       expression = {
         class = 'logical',
@@ -203,7 +191,7 @@ return function(tokens, error_reporter)
     local expression = and_expression()
 
     while match({ 'OR' }) do
-      local operator = previous()
+      local operator = last()
       local right = and_expression()
       expression = {
         class = 'logical',
@@ -220,7 +208,7 @@ return function(tokens, error_reporter)
     local expression = or_expression()
 
     if match({ 'EQUAL' }) then
-      local equals = previous()
+      local equals = last()
       local value = assignment()
 
       if expression.class == 'variable' then
@@ -239,7 +227,7 @@ return function(tokens, error_reporter)
         }
       end
 
-      error(ParseError(equals, 'Invalid assignment target.'))
+      error(ParseErr(equals, 'Invalid assignment target.'))
     end
 
     return expression
@@ -280,13 +268,13 @@ return function(tokens, error_reporter)
     local condition
     if not check('SEMICOLON') then
       condition = expression()
-    end
+    end  
     consume('SEMICOLON', "Expect ';' after loop condition.")
 
     local increment
     if not check('RIGHT_PAREN') then
       increment = expression()
-    end
+    end  
     consume('RIGHT_PAREN', "Expect ')' after for clauses.")
 
     local body = statement()
@@ -295,58 +283,38 @@ return function(tokens, error_reporter)
       body = {
         class = 'block',
         statements = { body, increment }
-      }
-    end
+      }  
+    end  
 
     if not condition then
       condition = {
         class = 'literal',
         value = true
-      }
-    end
+      }  
+    end  
     body = {
       class = 'while',
       condition = condition,
       body = body
-    }
+    }  
 
     if initializer then
       body = {
         class = 'block',
         statements = { initializer, body }
-      }
-    end
+      }  
+    end  
 
     return body
-  end
-
-  local function if_statement()
-    consume('LEFT_PAREN', "Expect '(' after 'if'.")
-    local condition = expression()
-    consume('RIGHT_PAREN', "Expect ')' after if condition.")
-
-    local then_branch = statement()
-    local else_branch
-
-    if match({ 'ELSE' }) then
-      else_branch = statement()
-    end
-
-    return {
-      class = 'if',
-      condition = condition,
-      then_branch = then_branch,
-      else_branch = else_branch
-    }
-  end
-
+  end  
+  
   local function print_statement()
     local value = expression()
     consume('SEMICOLON', "Expect ';' after value.")
     return {
       class = 'print',
       value = value
-    }
+    }  
   end
 
   local function while_statement()
@@ -361,6 +329,26 @@ return function(tokens, error_reporter)
       body = body
     }
   end
+
+  local function if_statement()
+    consume('LEFT_PAREN', "Expect '(' after 'if'.")
+    local condition = expression()
+    consume('RIGHT_PAREN', "Expect ')' after if condition.")
+
+    local then_branch = statement()
+    local else_branch
+
+    if match({ 'ELSE' }) then
+      else_branch = statement()
+    end    
+
+    return {
+      class = 'if',
+      condition = condition,
+      then_branch = then_branch,
+      else_branch = else_branch
+    }    
+  end    
 
   local function expression_statement()
     local expression = expression()
@@ -384,7 +372,7 @@ return function(tokens, error_reporter)
   end
 
   local function return_statement()
-    local keyword = previous()
+    local keyword = last()
     local value
 
     if not check('SEMICOLON') then
@@ -419,7 +407,7 @@ return function(tokens, error_reporter)
       if not check('RIGHT_PAREN') then
         repeat
           if #parameters >= 8 then
-            ParseError(peek(), 'Cannot have more than 8 parameters.')
+            ParseErr(next(), 'Cannot have more than 8 parameters.')
           end
           table.insert(parameters, consume('IDENTIFIER', 'Expect parameter name.'))
         until not match({ 'COMMA' })
@@ -447,7 +435,7 @@ return function(tokens, error_reporter)
       consume('IDENTIFIER', 'Expect superclass name')
       superclass = {
         class = 'variable',
-        name = previous()
+        name = last()
       }
     end
 
