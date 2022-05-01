@@ -20,11 +20,11 @@ local function report_err(line, where, message)
   has_error = true
 end
 
-local function gen_error(line, message)
+local function gen_err(line, message)
   report_err(line, '', message)
 end
 
-local function parser_error(token, message)
+local function parser_err(token, message)
   if token.type == 'EOF' then
     report_err(token.line, ' at end', message)
   else
@@ -43,9 +43,9 @@ end
 
 -- takes in code as text and passes it to the scanner, parser, and interpreter
 local function run(code)
-  local tokens = scanner(code, gen_error)
+  local tokens = scanner(code, gen_err)
   if has_error then return end
-  local statements = parser(tokens, parser_error)
+  local statements = parser(tokens, parser_err)
   if has_error then return end
   resolver.resolve(statements)
   if has_error then return end
@@ -53,18 +53,13 @@ local function run(code)
   if has_runtime_error then return end
 end
 
--- reads text from a file
-local function get_file(path)
+-- given a file path runs the Lox code inside it
+local function eval_file(path)
   local file = io.open(path, 'r')
   assert(file, 'file: '..path..' not found')
   local code = file:read('*all')
   file:close()
-  return code
-end
-
--- given a file path runs the Lox code inside it
-local function eval_file(path)
-  run(get_file(path))
+  run(code)
   if has_error then os.exit(65) end
   if has_runtime_error then os.exit(70) end
 end
