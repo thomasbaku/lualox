@@ -1,4 +1,4 @@
---Rollins Baird
+-- Rollins Baird
 -- follows visit patern of a treewalk interpreter
 
 -- based on: https://craftinginterpreters.com/
@@ -87,17 +87,17 @@ return function(err_report)
         })
       end,
 
-      grouping = function()
-        return visit(node.expression, env)
+      print = function()
+        print(visit(node.value, env))
       end,
 
       literal = function()
         return node.value
-      end,
-
-      print = function()
-        print(visit(node.value, env))
-      end,
+      end,  
+      
+      grouping = function()
+        return visit(node.expression, env)
+      end,  
 
       var = function()
         env.define(node.name.lexeme, visit(node.initializer, env))

@@ -38,9 +38,13 @@ Lua is a lightweight, high-level language designed for imbedded systems. It is a
 
 ![Output for featuretest.lox](tests\output\featuretests.png "All feature tests pass")
 
-- fib.lox: prints the first 92 fibonacci numbers (screenshot only shows the first few)
+- fib.lox: prints the first 92 fibonacci numbers (two screenshots show beginning and end)
 
-![Output for fib.lox](tests\output\fibnumbers.png "The first few of 92 fibonacci numbers")
+![Output for fib.lox](tests\output\fibnumbers1.png "The first few of 92 fibonacci numbers")
+
+...
+
+![Output for fib.lox](tests\output\fibnumbers2.png "The last few of 92 fibonacci numbers")
 
 - gradebook.lox: calculates final grade for CS 403
 
